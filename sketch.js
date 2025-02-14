@@ -1,9 +1,9 @@
-const WIDTH = 800;
 const MAP_SIZE = 4;
-const INTERVAL = WIDTH / MAP_SIZE;
-const PADDING = INTERVAL / 2;
-const VERTEX_RADIUS = INTERVAL / 6;
-const TEXT_SIZE = INTERVAL / 4;
+let DISPLAY_SIZE;
+let INTERVAL;
+let PADDING;
+let VERTEX_RADIUS;
+let TEXT_SIZE;
 
 let game;
 let ui;
@@ -285,12 +285,14 @@ class UI {
 }
 
 function setup() {
-  createCanvas(WIDTH, WIDTH);
+  DisplaySettings();
+  createCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
   game = new Game();
   ui = new UI();
 }
 
 function draw() {
+  DisplaySettings();
   mousePos = new Vec2(mouseX, mouseY);
 
   //描画
@@ -325,6 +327,14 @@ function skipTurn() {
 
 function newGame() {
   game = new Game();
+}
+
+function DisplaySettings() {
+    DISPLAY_SIZE = (displayWidth > displayHeight) ? displayHeight : displayWidth;
+  INTERVAL = DISPLAY_SIZE / MAP_SIZE;
+  PADDING = INTERVAL / 2;
+  VERTEX_RADIUS = INTERVAL / 6;
+  TEXT_SIZE = INTERVAL / 4;
 }
 
 /*
