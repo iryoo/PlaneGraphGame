@@ -190,36 +190,30 @@ class Game {
   }
 
   mouseDown() {
-    for (let i = 0; i < MAP_SIZE; i++) {
-      for (let j = 0; j < MAP_SIZE; j++) {
-        
-        //頂点をクリックしたかどうか
-        if (this.vertices[i][j].pos.sub(mousePos).len() < VERTEX_RADIUS && !this.isCreatingEdge) {
+    if (!this.isCreatingEdge) {
+      for (let i = 0; i < MAP_SIZE; i++) {
+        for (let j = 0; j < MAP_SIZE; j++) {
+          if (this.vertices[i][j].pos.sub(mousePos).len() < VERTEX_RADIUS) {
             
-          //頂点を作る
-          if (this.vertices[i][j].state == 0) {
-            if (this.canCreateVertex(i, j)) {
-              this.vertices[i][j].setState(this.turn);
-              this.nextTurn();
-            }
+            //頂点を作る
+            if (this.vertices[i][j].state == 0) {
+              if (this.canCreateVertex(i, j)) {
+                this.vertices[i][j].setState(this.turn);
+                this.nextTurn();
+              }
 
-            //辺を作るモードに切り替える
-          } else if (this.rounds >= 6 && this.vertices[i][j].state == this.turn) {
-            this.beginPos = this.vertices[i][j].pos;
-            this.incompleteEdge = new Edge(this.turn, this.beginPos, mousePos);
-            this.isCreatingEdge = true;
+              //辺を作るモードに切り替える
+            } else if (this.rounds >= 6 && this.vertices[i][j].state == this.turn) {
+              this.beginPos = this.vertices[i][j].pos;
+              this.incompleteEdge = new Edge(this.turn, this.beginPos, mousePos);
+              this.isCreatingEdge = true;
+            }
           }
         }
       }
-    }
-  }
-
-  mouseUp() {
-    if (this.isCreatingEdge) {
+    } else {
       for (let i = 0; i < MAP_SIZE; i++) {
         for (let j = 0; j < MAP_SIZE; j++) {
-          
-          //頂点をクリックしたかどうか
           if (this.vertices[i][j].pos.sub(mousePos).len() < VERTEX_RADIUS) {
             
             //辺を作る
@@ -233,8 +227,8 @@ class Game {
           }
         }
       }
+      this.isCreatingEdge = false;
     }
-    this.isCreatingEdge = false;
   }
 }
 
@@ -272,7 +266,6 @@ class UI {
   }
 
   displayRound(r) {
-    
     //現在のラウンド表示
     textSize(TEXT_SIZE);
     textAlign(LEFT, TOP);
@@ -307,17 +300,12 @@ function mousePressed() {
   game.mouseDown();
 }
 
-function mouseReleased() {
-  game.mouseUp();
-}
-
 function keyPressed() {
-  
   //パス
   if (key == "s") {
     skipTurn();
   }
-  
+
   //新しいゲーム
   if (key == "r") {
     newGame();
