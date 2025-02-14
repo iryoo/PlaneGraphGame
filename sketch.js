@@ -123,7 +123,7 @@ class Game {
       }
     }
   }
-  
+
   nextTurn() {
     this.turn *= -1;
     this.rounds++;
@@ -208,9 +208,16 @@ class Game {
               }
 
               //辺を作るモードに切り替える
-            } else if (this.rounds >= 6 && this.vertices[i][j].state == this.turn) {
+            } else if (
+              this.rounds >= 6 &&
+              this.vertices[i][j].state == this.turn
+            ) {
               this.beginPos = this.vertices[i][j].pos;
-              this.incompleteEdge = new Edge(this.turn, this.beginPos, mousePos);
+              this.incompleteEdge = new Edge(
+                this.turn,
+                this.beginPos,
+                mousePos
+              );
               this.isCreatingEdge = true;
             }
 
@@ -304,15 +311,25 @@ function mousePressed() {
 function keyPressed() {
   //パス
   if (key == "s") {
-    game.nextTurn();
+    skipTurn();
   }
   //新しいゲーム
   if (key == "r") {
-    game = new Game();
+    newGame();
   }
+}
+
+function skipTurn() {
+  game.nextTurn();
+}
+
+function newGame() {
+  game = new Game();
 }
 
 /*
 やること
 ・得点計算
+・1手前に戻る→Gameクラスを複数インスタンスすることでできるのでは？
+・スマホのタップに対応させる
 */
