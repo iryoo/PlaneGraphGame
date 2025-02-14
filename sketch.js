@@ -1,5 +1,5 @@
 const WIDTH = 800;
-const MAP_SIZE = 8;
+const MAP_SIZE = 4;
 const INTERVAL = WIDTH / MAP_SIZE;
 const PADDING = INTERVAL / 2;
 const VERTEX_RADIUS = INTERVAL / 6;
