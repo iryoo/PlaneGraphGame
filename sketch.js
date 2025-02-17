@@ -6,6 +6,9 @@ const VERTEX_RADIUS = INTERVAL / 6;
 const LINE_SIZE = VERTEX_RADIUS / 2;
 const TEXT_SIZE = INTERVAL / 4;
 
+let game;
+let mouseWorldPos;
+
 class Vec2 {
   constructor(_x, _y) {
     this.x = _x;
@@ -259,12 +262,18 @@ class Game {
   }
 }
 
-let game;
-let mouseWorldPos;
-
 function setup() {
   createCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
   game = new Game();
+  
+  let skipButton = createButton("パス");
+  skipButton.mousePressed(skipTurn);
+  
+  let resetButton = createButton("ゲームリセット");
+  resetButton.mousePressed(reset);
+  
+  let resultButton = createButton("得点計算");
+  resultButton.mousePressed(result);
 }
 
 function draw() {
@@ -319,24 +328,10 @@ function mousePressed() {
   }
 }
 
-function keyPressed() {
-  //パス
-  if (key == "s") {
-    skipTurn();
-  }
+let skipTurn = _ => game.nextTurn();
+let reset = _ => game = new Game();
+let result = _ => {
 
-  //新しいゲーム
-  if (key == "r") {
-    newGame();
-  }
-}
-
-function skipTurn() {
-  game.nextTurn();
-}
-
-function newGame() {
-  game = new Game();
 }
 
 /*
