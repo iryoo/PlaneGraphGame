@@ -3,11 +3,8 @@ const DISPLAY_SIZE = 800;
 const INTERVAL = DISPLAY_SIZE / MAP_SIZE;
 const PADDING = INTERVAL / 2;
 const VERTEX_RADIUS = INTERVAL / 6;
+const LINE_SIZE = VERTEX_RADIUS / 2;
 const TEXT_SIZE = INTERVAL / 4;
-
-let game;
-let ui;
-let mousePos;
 
 class Vec2 {
   constructor(_x, _y) {
@@ -47,56 +44,65 @@ class Vec2 {
 }
 
 class Vertex {
-  constructor(_pos, _size) {
+  constructor(_pos) {
     this.pos = _pos;
-    this.size = _size;
     this.state = 0;
     this.col = null;
-  }
-  setState(turn) {
-    this.state = turn;
-    this.setColor(turn, 1);
-  }
-  setColor(turn, isSolid) {
-    if (turn == 1 && !isSolid) this.col = color(147, 224, 255);
-    else if (turn == 1 && isSolid) this.col = color(80, 150, 255);
-    else if (turn == -1 && !isSolid) this.col = color(255, 178, 132);
-    else if (turn == -1 && isSolid) this.col = color(255, 77, 42);
-    else this.col = color(0, 0, 0, 0);
+    this.setColor(0, false);
   }
 
-  drawVertex() {
+  setState(_state) {
+    this.state = _state;
+    this.setColor(_state, true);
+  }
+
+  setColor(turn, isSolid) {
+    let c = color(0, 0, 0, 0);
+    if (turn == 1 && !isSolid) c = color(147, 224, 255);
+    else if (turn == 1 && isSolid) c = color(80, 150, 255);
+    else if (turn == -1 && !isSolid) c = color(255, 178, 132);
+    else if (turn == -1 && isSolid) c = color(255, 77, 42);
+    this.col = c;
+  }
+
+  drawVertex(radius) {
     push();
     fill(this.col);
-    circle(this.pos.x, this.pos.y, this.size);
+    let worldPos = game.fromPosToWorldPos(this.pos);
+    circle(worldPos.x, worldPos.y, 2 * radius);
     pop();
   }
 }
 
 class Edge {
-  constructor(_turn, _begin, _end) {
+  constructor(_isSolid, _state, _begin, _end) {
     this.begin = _begin;
     this.end = _end;
-    this.state = _turn;
-    this.col = null;
+    this.state = _state;
+    this.col = this.getColor(_isSolid);
   }
 
-  setEndPos(end) {
-    this.end = end;
+  setEndPos(_end) {
+    this.end = _end;
   }
 
-  setColor(isSolid) {
-    if (this.state == 1 && !isSolid) this.col = color(147, 224, 255);
-    else if (this.state == 1 && isSolid) this.col = color(80, 150, 255);
-    else if (this.state == -1 && !isSolid) this.col = color(255, 178, 132);
-    else if (this.state == -1 && isSolid) this.col = color(255, 77, 42);
+  getColor(isSolid) {
+    let c = color(0, 0, 0, 0);
+    let state = this.state;
+    if (state == 1 && !isSolid) c = color(147, 224, 255);
+    else if (state == 1 && isSolid) c = color(80, 150, 255);
+    else if (state == -1 && !isSolid) c = color(255, 178, 132);
+    else if (state == -1 && isSolid) c = color(255, 77, 42);
+    return c;
   }
 
-  drawEdge() {
+  drawEdge(size) {
     push();
     stroke(this.col);
-    strokeWeight(20);
-    line(this.begin.x, this.begin.y, this.end.x, this.end.y);
+    strokeWeight(size);
+    let worldPosBegin = game.fromPosToWorldPos(this.begin);
+    let worldPosEnd = game.fromPosToWorldPos(this.end);
+    line(worldPosBegin.x, worldPosBegin.y, worldPosEnd.x, worldPosEnd.y);
     pop();
   }
 }
@@ -104,7 +110,7 @@ class Edge {
 class Game {
   constructor() {
     this.turn = 1;
-    this.rounds = 1;
+    this.round = 1;
     this.vertices = [];
     this.edges = [];
     this.incompleteEdge = null;
@@ -112,18 +118,29 @@ class Game {
     this.beginPos = null;
 
     //頂点を配置する
-    for (let i = 0; i < MAP_SIZE; i++) {
-      this.vertices[i] = [];
-      for (let j = 0; j < MAP_SIZE; j++) {
-        let vertexPos = new Vec2(PADDING + INTERVAL * i, PADDING + INTERVAL * j);
-        this.vertices[i][j] = new Vertex(vertexPos, VERTEX_RADIUS * 2);
-      }
+    for (let i = 0; i < pow(MAP_SIZE, 2); i++) {
+      let x = i % MAP_SIZE;
+      let y = floor(i / MAP_SIZE);
+      let vertexPos = new Vec2(x, y);
+      this.vertices[i] = new Vertex(vertexPos);
     }
   }
 
   nextTurn() {
     this.turn *= -1;
-    this.rounds++;
+    this.round++;
+  }
+
+  fromPosToWorldPos(pos) {
+    let worldPosX = PADDING + INTERVAL * pos.x;
+    let worldPosY = PADDING + INTERVAL * pos.y;
+    return new Vec2(worldPosX, worldPosY);
+  }
+
+  fromWorldPosToPos(worldPos) {
+    let posX = (worldPos.x - PADDING) / INTERVAL;
+    let posY = (worldPos.y - PADDING) / INTERVAL;
+    return new Vec2(posX, posY);
   }
 
   canCreateEdge(begin, end) {
@@ -139,19 +156,17 @@ class Game {
     }
 
     //間に頂点がある
-    for (let i = 0; i < MAP_SIZE; i++) {
-      for (let j = 0; j < MAP_SIZE; j++) {
-        if (this.vertices[i][j].state != 0) {
-          let vertexPos = this.vertices[i][j].pos;
-          let dx1 = begin.x - vertexPos.x;
-          let dx2 = end.x - vertexPos.x;
-          let dy1 = begin.y - vertexPos.y;
-          let dy2 = end.y - vertexPos.y;
-          let check1 = dx2 * dy1 == dx1 * dy2; //同一直線上にある
-          let check2 = dx1 * dx2 <= 0 && dy1 * dy2 <= 0; //頂点が辺の内側にある
-          let check3 = vertexPos != begin && vertexPos != end; //頂点が始点または終点と重ならない
-          enable *= !(check1 && check2 && check3);
-        }
+    for (let i = 0; i < pow(MAP_SIZE, 2); i++) {
+      if (this.vertices[i].state != 0) {
+        let vertexPos = this.vertices[i].pos;
+        let dx1 = begin.x - vertexPos.x;
+        let dx2 = end.x - vertexPos.x;
+        let dy1 = begin.y - vertexPos.y;
+        let dy2 = end.y - vertexPos.y;
+        let check1 = dx2 * dy1 == dx1 * dy2; //同一直線上にある
+        let check2 = dx1 * dx2 <= 0 && dy1 * dy2 <= 0; //頂点が辺の内側にある
+        let check3 = vertexPos != begin && vertexPos != end; //頂点が始点または終点と重ならない
+        enable *= !(check1 && check2 && check3);
       }
     }
 
@@ -171,9 +186,9 @@ class Game {
     return enable;
   }
 
-  canCreateVertex(x, y) {
+  canCreateVertex(i) {
     let enable = true;
-    let vertexPos = this.vertices[x][y].pos;
+    let vertexPos = this.vertices[i].pos;
 
     //辺の間にある
     for (let edge of this.edges) {
@@ -189,79 +204,47 @@ class Game {
     return enable;
   }
 
-  mouseDown() {
-    if (!this.isCreatingEdge) {
-      for (let i = 0; i < MAP_SIZE; i++) {
-        for (let j = 0; j < MAP_SIZE; j++) {
-          if (this.vertices[i][j].pos.sub(mousePos).len() < VERTEX_RADIUS) {
-            
-            //頂点を作る
-            if (this.vertices[i][j].state == 0) {
-              if (this.canCreateVertex(i, j)) {
-                this.vertices[i][j].setState(this.turn);
-                this.nextTurn();
-              }
+  drawAll() {
+    background(91, 150, 60);
+    stroke(0, 51, 0);
+    strokeWeight(3);
 
-              //辺を作るモードに切り替える
-            } else if (this.rounds >= 6 && this.vertices[i][j].state == this.turn) {
-              this.beginPos = this.vertices[i][j].pos;
-              this.incompleteEdge = new Edge(this.turn, this.beginPos, mousePos);
-              this.isCreatingEdge = true;
-            }
-          }
-        }
-      }
-    } else {
-      for (let i = 0; i < MAP_SIZE; i++) {
-        for (let j = 0; j < MAP_SIZE; j++) {
-          if (this.vertices[i][j].pos.sub(mousePos).len() < VERTEX_RADIUS) {
-            
-            //辺を作る
-            if (this.vertices[i][j].state == this.turn) {
-              let endPos = this.vertices[i][j].pos;
-              if (this.canCreateEdge(this.beginPos, endPos)) {
-                this.edges.push(new Edge(this.turn, this.beginPos, endPos));
-                this.nextTurn();
-              }
-            }
-          }
-        }
-      }
-      this.isCreatingEdge = false;
-    }
+    this.drawVertices();
+    this.drawEdges();
+    this.drawIncompleteEdges();
+    this.displayRound(this.round);
   }
-}
-
-class UI {
-  constructor() {}
 
   drawVertices() {
-    for (let i = 0; i < MAP_SIZE; i++) {
-      for (let j = 0; j < MAP_SIZE; j++) {
-        if (game.vertices[i][j].state == 0 && !game.isCreatingEdge && game.canCreateVertex(i, j)) {
-          if (game.vertices[i][j].pos.sub(mousePos).len() < VERTEX_RADIUS) {
-            game.vertices[i][j].setColor(game.turn, false);
-          } else {
-            game.vertices[i][j].setColor(0, false);
-          }
+    let isMouseOnVertex = (i) =>
+      this.fromPosToWorldPos(this.vertices[i].pos).sub(mouseWorldPos).len() <
+      VERTEX_RADIUS;
+    for (let i = 0; i < pow(MAP_SIZE, 2); i++) {
+      if (
+        this.vertices[i].state == 0 &&
+        !this.isCreatingEdge &&
+        this.canCreateVertex(i)
+      ) {
+        if (isMouseOnVertex(i)) {
+          this.vertices[i].setColor(this.turn, false);
+        } else {
+          this.vertices[i].setColor(0, false);
         }
-        game.vertices[i][j].drawVertex();
       }
+      this.vertices[i].drawVertex(VERTEX_RADIUS);
     }
   }
 
   drawIncompleteEdges() {
-    if (game.isCreatingEdge) {
-      game.incompleteEdge.setColor(false);
-      game.incompleteEdge.setEndPos(mousePos);
-      game.incompleteEdge.drawEdge();
+    if (this.isCreatingEdge) {
+      this.incompleteEdge.setEndPos(this.fromWorldPosToPos(mouseWorldPos));
+      this.incompleteEdge.drawEdge(LINE_SIZE);
     }
   }
 
   drawEdges() {
-    for (let edge of game.edges) {
-      edge.setColor(true);
-      edge.drawEdge();
+    for (let edge of this.edges) {
+      edge.drawEdge(LINE_SIZE);
     }
   }
 
@@ -270,34 +253,70 @@ class UI {
     textSize(TEXT_SIZE);
     textAlign(LEFT, TOP);
     strokeWeight(6);
-    if (game.turn == 1) fill(80, 150, 255);
-    else if (game.turn == -1) fill(255, 77, 42);
+    if (this.turn == 1) fill(80, 150, 255);
+    else if (this.turn == -1) fill(255, 77, 42);
     text(r, 20, 20);
   }
 }
 
+let game;
+let mouseWorldPos;
+
 function setup() {
   createCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
   game = new Game();
-  ui = new UI();
 }
 
 function draw() {
-  mousePos = new Vec2(mouseX, mouseY);
-
-  //描画
-  background(91, 150, 60);
-  stroke(0, 51, 0);
-  strokeWeight(3);
-
-  ui.drawVertices();
-  ui.drawEdges();
-  ui.drawIncompleteEdges();
-  ui.displayRound(game.rounds);
+  mouseWorldPos = new Vec2(mouseX, mouseY);
+  game.drawAll();
 }
 
 function mousePressed() {
-  game.mouseDown();
+  let turn = game.turn;
+  let round = game.round;
+  let isMouseOnVertex = (i) =>
+    game.fromPosToWorldPos(game.vertices[i].pos).sub(mouseWorldPos).len() <
+    VERTEX_RADIUS;
+
+  if (!game.isCreatingEdge) {
+    for (let i = 0; i < pow(MAP_SIZE, 2); i++) {
+      if (isMouseOnVertex(i)) {
+        //頂点を作る
+        if (game.vertices[i].state == 0) {
+          if (game.canCreateVertex(i)) {
+            game.vertices[i].setState(turn);
+            game.nextTurn();
+          }
+
+          //辺を作るモードに切り替える
+        } else if (round >= 6 && game.vertices[i].state == turn) {
+          game.beginPos = game.vertices[i].pos;
+          game.incompleteEdge = new Edge(
+            false,
+            turn,
+            game.beginPos,
+            mouseWorldPos
+          );
+          game.isCreatingEdge = true;
+        }
+      }
+    }
+  } else {
+    for (let i = 0; i < pow(MAP_SIZE, 2); i++) {
+      if (isMouseOnVertex(i)) {
+        //辺を作る
+        if (game.vertices[i].state == turn) {
+          let endPos = game.vertices[i].pos;
+          if (game.canCreateEdge(game.beginPos, endPos)) {
+            game.edges.push(new Edge(true, turn, game.beginPos, endPos));
+            game.nextTurn();
+          }
+        }
+      }
+    }
+    game.isCreatingEdge = false;
+  }
 }
 
 function keyPressed() {
@@ -323,7 +342,6 @@ function newGame() {
 /*
 やること
 ・得点計算
-・1手前に戻る→Gameクラスを複数インスタンスすることでできるのでは？
-・スマホのタップに対応させる
-・マップサイズが6の時だけ頂点を越えた辺が作れるバグの修正（頂点と辺は座標ではなく、二次元配列のインデックスとして持つべき）
+・1手前に戻る→（一日試行錯誤したが、できなかったので諦め）
+・ボタンをjsで書く
 */
