@@ -5,3 +5,9 @@ html, body {
 canvas {
   display: block;
 }
+
+.button {
+  padding: 10px 10px;
+  min-width: 200px;
+  font-size: 1em;
+}
