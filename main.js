@@ -1,16 +1,16 @@
-const MAP_SIZE = 4;
-const DISPLAY_SIZE = 800;
-const INTERVAL = DISPLAY_SIZE / MAP_SIZE;
-const PADDING = INTERVAL / 2;
-const VERTEX_RADIUS = INTERVAL / 6;
-const LINE_SIZE = VERTEX_RADIUS / 2;
-const TEXT_SIZE = INTERVAL / 4;
+let MAP_SIZE = 4;
+let DISPLAY_SIZE;
+let INTERVAL;
+let PADDING;
+let VERTEX_RADIUS;
+let LINE_SIZE;
+let TEXT_SIZE;
 
 let game;
 let mouseWorldPos;
 
 function setup() {
-  createCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
+  windowResized();
   game = new Game(MAP_SIZE);
 }
 
@@ -19,12 +19,20 @@ function draw() {
   game.drawAll();
 }
 
+function windowResized() {
+  DISPLAY_SIZE = (windowWidth > windowHeight - 100) ? windowHeight - 100 : windowWidth;
+  INTERVAL = DISPLAY_SIZE / MAP_SIZE;
+  PADDING = INTERVAL / 2;
+  VERTEX_RADIUS = INTERVAL / 6;
+  LINE_SIZE = VERTEX_RADIUS / 2;
+  TEXT_SIZE = INTERVAL / 4;
+  resizeCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
+}
+
 function mousePressed() {
   let turn = game.turn;
   let round = game.round;
-  let isMouseOnVertex = (i) =>
-    game.fromPosToWorldPos(game.vertices[i].pos).sub(mouseWorldPos).len() <
-    VERTEX_RADIUS;
+  let isMouseOnVertex = (i) => game.fromPosToWorldPos(game.vertices[i].pos).sub(mouseWorldPos).len() < VERTEX_RADIUS;
 
   if (!game.isCreatingEdge) {
     for (let i = 0; i < pow(game.mapSize, 2); i++) {
@@ -39,12 +47,7 @@ function mousePressed() {
           //辺を作るモードに切り替える
         } else if (round >= 6 && game.vertices[i].state == turn) {
           game.beginPos = game.vertices[i].pos;
-          game.incompleteEdge = new Edge(
-            false,
-            turn,
-            game.beginPos,
-            mouseWorldPos
-          );
+          game.incompleteEdge = new Edge(false, turn, game.beginPos, mouseWorldPos);
           game.isCreatingEdge = true;
         }
       }
@@ -59,9 +62,7 @@ function mousePressed() {
             let newEdge = new Edge(true, turn, game.beginPos, endPos);
             game.edges.push(newEdge);
             game.vertices[i].adjacentEdges.push(newEdge);
-            game.vertices[
-              newEdge.begin.x + game.mapSize * newEdge.begin.y
-            ].adjacentEdges.push(newEdge);
+            game.vertices[newEdge.begin.x + game.mapSize * newEdge.begin.y].adjacentEdges.push(newEdge);
             game.nextTurn();
           }
         }
@@ -86,7 +87,7 @@ let calculateResult = () => {
   }
 
   const result = (graph) => graph.findCyclesArea();
-  
+
   const totalAreaResult1 = document.getElementById("totalAreaResult1");
   const totalAreaResult2 = document.getElementById("totalAreaResult2");
   totalAreaResult1.innerHTML = "先手の総面積: " + result(graph1).totalArea;
@@ -96,5 +97,5 @@ let calculateResult = () => {
 /*
 やること
 ・1手前に戻る→（一日試行錯誤したが、できなかったので諦め）
-・ボタンの装飾
+・オンライン二人対戦
 */
