@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  </head>
-  <body>
-    <main></main>
-    <script src="classes.js"></script>
-    <script src="main.js"></script>
-    <button class="button" onclick="skipTurn()">パス</button>
-    <button class="button" onclick="resetGame()">ゲームリセット</button>
-    <button class="button" onclick="calculateResult()">得点計算</button>
-    <div id="totalAreaResult1">先手の総面積: </div>
-    <div id="totalAreaResult2">後手の総面積: </div>
-  </body>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>平面グラフゲーム</title>
+</head>
+<main></main>
+
+<body>
+  <script src="classes.js"></script>
+  <script src="main.js"></script>
+  <button class="button" onclick="skipTurn()">パス</button>
+  <button class="button" onclick="resetGame()">ゲームリセット</button>
+  <button class="button" onclick="calculateResult()">得点計算</button>
+  <div id="totalAreaResult1">先手の総面積:</div>
+  <div id="totalAreaResult2">後手の総面積:</div>
+</body>
+
 </html>
