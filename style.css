@@ -5,7 +5,6 @@ canvas {
 body {
   font-family: 'Helvetica', 'Arial', sans-serif;
   display: flex;
-  width: 500px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
