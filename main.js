@@ -88,10 +88,8 @@ let calculateResult = () => {
 
   const result = (graph) => graph.findCyclesArea();
 
-  const totalAreaResult1 = document.getElementById("totalAreaResult1");
-  const totalAreaResult2 = document.getElementById("totalAreaResult2");
-  totalAreaResult1.innerHTML = "先手の総面積: " + result(graph1).totalArea;
-  totalAreaResult2.innerHTML = "後手の総面積: " + result(graph2).totalArea;
+  document.getElementById('firstPlayerArea').textContent = result(graph1).totalArea;
+  document.getElementById('secondPlayerArea').textContent = result(graph2).totalArea;
 };
 
 /*

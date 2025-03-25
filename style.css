@@ -1,16 +1,95 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
 canvas {
   display: block;
 }
 
+body {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  margin: 0;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  border-bottom: 3px solid #2196F3;
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.button-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .button {
-  padding: 10px 10px;
-  min-width: 200px;
-  font-size: 1em;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:nth-child(1) {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.button:nth-child(2) {
+  background-color: #FF9800;
+  color: white;
+}
+
+.button:nth-child(3) {
+  background-color: #2196F3;
+  color: white;
+}
+
+#totalAreaResult1 {
+  color:#5096ff;
+}
+
+#totalAreaResult2 {
+  color:#ff4d2a;
+}
+
+.area-result {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 15px 25px;
+  margin: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.area-result span {
+  font-weight: bold;
 }
