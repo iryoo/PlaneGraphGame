@@ -12,14 +12,24 @@
 
 <body>
   <h1>平面グラフゲーム</h1>
+
+  <div id="mapSizeContainer">
+    <label for="mapSize">Size: </label>
+    <input type="number" min="3" max="8" value="4" id="mapSize">
+  </div>
+
+  <div id="rounder">
+    <span id="round"></span>ターン目
+  </div>
+
   <main></main>
   <script src="classes.js"></script>
   <script src="main.js"></script>
 
   <div class="button-container">
     <button class="button" onclick="skipTurn()">パス</button>
-    <button class="button" onclick="resetGame()">ゲームリセット</button>
     <button class="button" onclick="calculateResult()">得点計算</button>
+    <button class="button" onclick="resetGame()">ゲームリセット</button>
   </div>
   <div id="totalAreaResult1" class="area-result">
     先手の総面積: <span id="firstPlayerArea">0</span>

@@ -370,9 +370,9 @@ class Game {
   }
 
   drawAll() {
-    background(91, 150, 60);
-    stroke(0, 51, 0);
-    strokeWeight(3);
+    background(255);
+    stroke(51);
+    strokeWeight(2);
 
     this.drawVertices();
     this.drawEdges();
@@ -415,11 +415,8 @@ class Game {
 
   displayRound(r) {
     //現在のラウンド表示
-    textSize(TEXT_SIZE);
-    textAlign(LEFT, TOP);
-    strokeWeight(6);
-    if (this.turn == 1) fill(80, 150, 255);
-    else if (this.turn == -1) fill(255, 77, 42);
-    text(r, 20, 20);
+    if (this.turn == 1) roundText.style.color = "#5096ff";
+    else if (this.turn == -1) roundText.style.color = "#ff4d2a";
+    roundText.textContent = r;
   }
 }

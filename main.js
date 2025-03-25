@@ -1,32 +1,37 @@
-let MAP_SIZE = 4;
-let DISPLAY_SIZE;
-let INTERVAL;
-let PADDING;
-let VERTEX_RADIUS;
-let LINE_SIZE;
-let TEXT_SIZE;
+const roundText = document.getElementById("round");
+const mapSize = document.getElementById("mapSize");
+const DISPLAY_SIZE = 400;
+
+let MAP_SIZE = mapSize.value;
+let INTERVAL = DISPLAY_SIZE / MAP_SIZE;
+let PADDING = INTERVAL / 2;
+let VERTEX_RADIUS = INTERVAL / 6;
+let LINE_SIZE = VERTEX_RADIUS / 2;
+
+function updateMapSize(s) {
+  MAP_SIZE = mapSize.value;
+  INTERVAL = DISPLAY_SIZE / MAP_SIZE;
+  PADDING = INTERVAL / 2;
+  VERTEX_RADIUS = INTERVAL / 6;
+  LINE_SIZE = VERTEX_RADIUS / 2;
+  game = new Game(MAP_SIZE);
+}
+
+mapSize.addEventListener("input", (event) => {
+  updateMapSize(event.target.value);
+});
 
 let game;
 let mouseWorldPos;
 
 function setup() {
-  windowResized();
+  createCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
   game = new Game(MAP_SIZE);
 }
 
 function draw() {
   mouseWorldPos = new Vec2(mouseX, mouseY);
   game.drawAll();
-}
-
-function windowResized() {
-  DISPLAY_SIZE = (windowWidth > windowHeight - 100) ? windowHeight - 100 : windowWidth;
-  INTERVAL = DISPLAY_SIZE / MAP_SIZE;
-  PADDING = INTERVAL / 2;
-  VERTEX_RADIUS = INTERVAL / 6;
-  LINE_SIZE = VERTEX_RADIUS / 2;
-  TEXT_SIZE = INTERVAL / 4;
-  resizeCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
 }
 
 function mousePressed() {
