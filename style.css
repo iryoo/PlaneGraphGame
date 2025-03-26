@@ -13,6 +13,81 @@ body {
   text-align: center;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.modal-header {
+  padding: 10px;
+  text-align: center;
+}
+
+.modal-body {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.modal-footer {
+  padding: 10px;
+  text-align: right;
+}
+
+.modal-close {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.modal-close button {
+  padding: 10px 20px;
+  background-color: #5096ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.help-icon {
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
 h1 {
   color: #333;
   font-size: 2.5rem;
@@ -22,8 +97,24 @@ h1 {
   display: inline-block;
 }
 
-#mapSizeContainer {
+h2 {
+  text-decoration: underline;
+}
+
+h3 {
+  margin-bottom: 5px;
+}
+
+h4 {
+  margin-bottom: 5px;
+}
+
+#sizeContainer {
   display: flex;
+}
+
+#mapSize {
+  margin-right: 10px;
 }
 
 label {

@@ -1,24 +1,44 @@
 const roundText = document.getElementById("round");
 const mapSize = document.getElementById("mapSize");
-const DISPLAY_SIZE = 400;
+const displaySize = document.getElementById("displaySize");
+const ruleModal = document.getElementById("ruleModal");
 
+let DISPLAY_SIZE = displaySize.value;
 let MAP_SIZE = mapSize.value;
 let INTERVAL = DISPLAY_SIZE / MAP_SIZE;
 let PADDING = INTERVAL / 2;
 let VERTEX_RADIUS = INTERVAL / 6;
 let LINE_SIZE = VERTEX_RADIUS / 2;
 
-function updateMapSize(s) {
+function updateSizeSettings(s) {
+  DISPLAY_SIZE = displaySize.value;
   MAP_SIZE = mapSize.value;
   INTERVAL = DISPLAY_SIZE / MAP_SIZE;
   PADDING = INTERVAL / 2;
   VERTEX_RADIUS = INTERVAL / 6;
   LINE_SIZE = VERTEX_RADIUS / 2;
-  game = new Game(MAP_SIZE);
+}
+
+window.onload = function () {
+  openModal();
+};
+
+function openModal() {
+  ruleModal.style.display = 'flex';
+}
+
+function closeModal() {
+  ruleModal.style.display = 'none';
 }
 
 mapSize.addEventListener("input", (event) => {
-  updateMapSize(event.target.value);
+  updateSizeSettings(event.target.value);
+  game = new Game(MAP_SIZE);
+});
+
+displaySize.addEventListener("input", (event) => {
+  updateSizeSettings(event.target.value);
+  resizeCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
 });
 
 let game;

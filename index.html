@@ -11,11 +11,64 @@
 </head>
 
 <body>
-  <h1>平面グラフゲーム</h1>
+  <div class="help-icon" onclick="openModal()">?</div>
+  <div id="ruleModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>平面グラフゲーム</h2>
+      </div>
+      <div class="modal-body">
+        <h3>どんなゲーム？</h3>
+        <div>頂点と辺を作っていくことで閉路を完成させ、それらの総面積を競う二人対戦ゲームです。</div>
+        <div>ルールはとてもシンプルですが、勝つためにはかなり頭を使います。</div>
+        <hr>
 
-  <div id="mapSizeContainer">
-    <label for="mapSize">Size: </label>
+        <h3>ルール説明</h3>
+        <div>オセロや囲碁のように、二人のプレイヤーの手番が交互に回ってきます。</div>
+        <div>自分のターンでは下記のいずれかの行動をします。</div>
+        <ol>
+          <li>頂点を作る</li>
+          <li>辺を作る</li>
+        </ol>
+        <div>三角形や四角形などの閉路を作れるだけ作り、それらの総面積が得点になります。</div>
+        <div>互いのプレイヤーのできることがなくなるまで、行動またはパスをします。</div>
+        <div>その後得点計算をして、総面積が大きいプレイヤーの勝利です。</div>
+
+        <h4>頂点の作り方</h4>
+        <div>未取得の頂点（白い丸）をクリックすることで、その頂点を取得できます。</div>
+        <div>ただし、辺にまたがる頂点は取得できません</div>
+
+        <h4>辺の作り方</h4>
+        <div>自分が取得した頂点二つを結ぶことで、辺を作成できます。</div>
+        <div>ただし、以下の条件に一つても当てはまる辺は作成できません。</div>
+        <ul>
+          <li>頂点をまたぐ辺</li>
+          <li>辺同士が交差させる辺</li>
+          <li>先手の3手目（先手有利を軽減させるためのハンデ）</li>
+        </ul>
+        <hr>
+
+        <h3>注意事項</h3>
+        <p>ゲーム中にゲームリセットやゲームサイズを変更すると、ゲームが最初からになります。ゲーム中に誤って操作しないよう注意してください。</p>
+        <p>スマホやタブレットでもプレイ可能ですが、対応していないブラウザもあります。（Safali未対応）</p>
+      </div>
+
+
+      <div class="modal-footer">
+        <div class="modal-close">
+          <button onclick="closeModal()">閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h1>平面グラフゲーム</h1>
+  <div id="sizeContainer">
+    <label for="mapSize">ゲームサイズ:</label>
     <input type="number" min="3" max="8" value="4" id="mapSize">
+
+    <label for="displaySize">画面サイズ:</label>
+    <input type="range" min="400" max="1000" value="500" id="displaySize">
   </div>
 
   <div id="rounder">
