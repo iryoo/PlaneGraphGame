@@ -19,39 +19,58 @@
         <h2>平面グラフゲーム</h2>
       </div>
       <div class="modal-body">
-        <h3>どんなゲーム？</h3>
-        <div>頂点と辺を作っていくことで閉路を完成させ、それらの総面積を競う二人対戦ゲームです。</div>
-        <div>ルールはとてもシンプルですが、勝つためにはかなり頭を使います。</div>
+        <h3>ゲーム概要</h3>
+        <div>「点を打つ」と「線を引く」で多角形を作り、作った多角形の総面積を競う二人対戦ゲームです。</div>
+        <div>ルールはシンプルですが、戦略的な思考が勝敗を左右します。</div>
+
         <hr>
 
-        <h3>ルール説明</h3>
-        <div>オセロや囲碁のように、二人のプレイヤーの手番が交互に回ってきます。</div>
-        <div>自分のターンでは下記のいずれかの行動をします。</div>
-        <ol>
-          <li>頂点を作る</li>
-          <li>辺を作る</li>
-        </ol>
-        <div>三角形や四角形などの閉路を作れるだけ作り、それらの総面積が得点になります。</div>
-        <div>互いのプレイヤーのできることがなくなるまで、行動またはパスをします。</div>
-        <div>その後得点計算をして、総面積が大きいプレイヤーの勝利です。</div>
-
-        <h4>頂点の作り方</h4>
-        <div>未取得の頂点（白い丸）をクリックすることで、その頂点を取得できます。</div>
-        <div>ただし、辺にまたがる頂点は取得できません</div>
-
-        <h4>辺の作り方</h4>
-        <div>自分が取得した頂点二つを結ぶことで、辺を作成できます。</div>
-        <div>ただし、以下の条件に一つても当てはまる辺は作成できません。</div>
+        <h3>基本ルール</h3>
+        <div>交互に手番を行います。</div>
+        <div>自分の手番では次のどちらかを行います：</div>
         <ul>
-          <li>頂点をまたぐ辺</li>
-          <li>辺同士が交差させる辺</li>
-          <li>先手の3手目（先手有利を軽減させるためのハンデ）</li>
+          <li>点を打つ</li>
+          <li>線を引く</li>
         </ul>
+        <div>三角形や四角形などの多角形を作ると得点になります。</div>
+        <div>行動できない場合、またはしたくない場合はパスします。</div>
+        <div>二人とも行動できなくなったらゲーム終了です。</div>
+        <div>作った多角形の総面積が大きい人の勝利です。</div>
+
+        <h4>点の打ち方</h4>
+        <div>盤上の点をクリックして打ちます。</div>
+        <div>ただし、次のような点は打てません：</div>
+        <div class="rule-columns">
+          <div class="rule-column">
+            <div>プレイヤーが既に打った点</div>
+            <img src="gif/vertex-animation1.gif" class="rule-gif">
+          </div>
+          <div class="rule-column">
+            <div>既存の線の上にある点</div>
+            <img src="gif/vertex-animation2.gif" class="rule-gif">
+          </div>
+        </div>
+
+        <h4>線の引き方</h4>
+        <div>自分が打った点同士を結んで線を引きます。</div>
+        <div>ただし、次のような線は引けません：</div>
+        <div class="rule-columns">
+          <div class="rule-column">
+            <div>他の線と交差する線</div>
+            <img src="gif/edge-animation1.gif" class="rule-gif">
+          </div>
+          <div class="rule-column">
+            <div>他の点を通過する線</div>
+            <img src="gif/edge-animation2.gif" class="rule-gif">
+          </div>
+        </div>
+        <div>また、先手は最初の3手で線を引くことができません（先手有利を調整するためのルール）。</div>
+
         <hr>
 
         <h3>注意事項</h3>
-        <p>ゲーム中にゲームリセットやゲームサイズを変更すると、ゲームが最初からになります。ゲーム中に誤って操作しないよう注意してください。</p>
-        <p>スマホやタブレットでもプレイ可能ですが、対応していないブラウザもあります。（Safari未対応）</p>
+        <p>「ゲームリセット」や「ゲームサイズ変更」操作は進行中のゲームを初期化します。ゲーム中に誤って操作しないよう注意してください。</p>
+        <p>スマートフォンやタブレットでもプレイ可能ですが、一部ブラウザ（Safariなど）には対応していません。</p>
       </div>
 
 
@@ -66,9 +85,11 @@
   <h1>平面グラフゲーム</h1>
   <div id="sizeContainer">
     <label for="mapSize">ゲームサイズ:</label>
-    <input type="number" min="3" max="8" value="4" id="mapSize">
+    <span id="mapSizeValue">4</span>
+    <input type="range" min="3" max="8" value="4" id="mapSize">
 
     <label for="displaySize">画面サイズ:</label>
+    <span id="displaySizeValue">500</span>
     <input type="range" min="400" max="1000" value="500" id="displaySize">
   </div>
 

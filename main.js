@@ -1,6 +1,8 @@
 const roundText = document.getElementById("round");
 const mapSize = document.getElementById("mapSize");
+const mapSizeValueSpan = document.getElementById("mapSizeValue");
 const displaySize = document.getElementById("displaySize");
+const displaySizeValueSpan = document.getElementById("displaySizeValue");
 const ruleModal = document.getElementById("ruleModal");
 
 let DISPLAY_SIZE = displaySize.value;
@@ -33,11 +35,13 @@ function closeModal() {
 
 mapSize.addEventListener("input", (event) => {
   updateSizeSettings(event.target.value);
+  mapSizeValueSpan.textContent = event.target.value;
   game = new Game(MAP_SIZE);
 });
 
 displaySize.addEventListener("input", (event) => {
   updateSizeSettings(event.target.value);
+  displaySizeValueSpan.textContent = event.target.value;
   resizeCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
 });
 

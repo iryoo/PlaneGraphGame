@@ -109,12 +109,45 @@ h4 {
   margin-bottom: 5px;
 }
 
-#sizeContainer {
+.rule-columns {
   display: flex;
+  gap: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
-#mapSize {
-  margin-right: 10px;
+.rule-column {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rule-column div {
+  margin-bottom: 5px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rule-gif {
+  display: block;
+  width: 200px;
+  height: auto;
+}
+
+#sizeContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px; 
+}
+
+#mapSizeValue,
+#displaySizeValue {
+  font-weight: bold;
 }
 
 label {
