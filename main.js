@@ -1,11 +1,9 @@
 const roundText = document.getElementById("round");
 const mapSize = document.getElementById("mapSize");
 const mapSizeValueSpan = document.getElementById("mapSizeValue");
-const displaySize = document.getElementById("displaySize");
-const displaySizeValueSpan = document.getElementById("displaySizeValue");
 const ruleModal = document.getElementById("ruleModal");
 
-let DISPLAY_SIZE = displaySize.value;
+const DISPLAY_SIZE = 500;
 let MAP_SIZE = mapSize.value;
 let INTERVAL = DISPLAY_SIZE / MAP_SIZE;
 let PADDING = INTERVAL / 2;
@@ -13,7 +11,6 @@ let VERTEX_RADIUS = INTERVAL / 6;
 let LINE_SIZE = VERTEX_RADIUS / 2;
 
 function updateSizeSettings(s) {
-  DISPLAY_SIZE = displaySize.value;
   MAP_SIZE = mapSize.value;
   INTERVAL = DISPLAY_SIZE / MAP_SIZE;
   PADDING = INTERVAL / 2;
@@ -39,17 +36,15 @@ mapSize.addEventListener("input", (event) => {
   game = new Game(MAP_SIZE);
 });
 
-displaySize.addEventListener("input", (event) => {
-  updateSizeSettings(event.target.value);
-  displaySizeValueSpan.textContent = event.target.value;
-  resizeCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
-});
-
 let game;
 let mouseWorldPos;
 
 function setup() {
   createCanvas(DISPLAY_SIZE, DISPLAY_SIZE);
+  const defaultCanvas0 = document.getElementById("defaultCanvas0");
+  defaultCanvas0.style.maxWidth = "600px";
+  defaultCanvas0.style.width = "95%";
+  defaultCanvas0.style.height = "auto";
   game = new Game(MAP_SIZE);
 }
 
@@ -61,7 +56,7 @@ function draw() {
 function mousePressed() {
   let turn = game.turn;
   let round = game.round;
-  let isMouseOnVertex = (i) => game.fromPosToWorldPos(game.vertices[i].pos).sub(mouseWorldPos).len() < VERTEX_RADIUS;
+  let isMouseOnVertex = (i) => game.fromPosToWorldPos(game.vertices[i].pos).sub(mouseWorldPos).len() < 2 * VERTEX_RADIUS;
 
   if (!game.isCreatingEdge) {
     for (let i = 0; i < pow(game.mapSize, 2); i++) {

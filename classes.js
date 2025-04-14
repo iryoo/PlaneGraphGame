@@ -382,8 +382,7 @@ class Game {
 
   drawVertices() {
     let isMouseOnVertex = (i) =>
-      this.fromPosToWorldPos(this.vertices[i].pos).sub(mouseWorldPos).len() <
-      VERTEX_RADIUS;
+      this.fromPosToWorldPos(this.vertices[i].pos).sub(mouseWorldPos).len() < 2 * VERTEX_RADIUS;
     for (let i = 0; i < pow(this.mapSize, 2); i++) {
       if (
         this.vertices[i].state == 0 &&
