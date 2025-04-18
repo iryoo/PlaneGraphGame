@@ -164,10 +164,11 @@ function mousePressed() {
   handleInteractionStart(mouseX, mouseY);
 }
 
-function touchStarted() {
-  handleInteractionStart(mouseX, mouseY);
-  return false;
-}
+//タッチ機能がうまくいかないのでコメントアウト
+// function touchStarted() {
+//   handleInteractionStart(mouseX, mouseY);
+//   return false;
+// }
 
 let skipTurn = () => game.nextTurn();
 
