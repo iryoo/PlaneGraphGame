@@ -37,6 +37,7 @@ mapSize.addEventListener("input", (event) => {
   updateSizeSettings(event.target.value);
   mapSizeValueSpan.textContent = event.target.value;
   game = new Game(MAP_SIZE);
+  calculateResult();
 });
 
 probability.addEventListener("input", (event) => {
@@ -107,7 +108,10 @@ function mousePressed() {
 }
 
 let skipTurn = () => game.nextTurn();
-let resetGame = () => (game = new Game(MAP_SIZE));
+let resetGame = () => {
+  game = new Game(MAP_SIZE);
+  calculateResult();
+};
 let calculateResult = () => {
   const graph1 = new GridGraph(game.mapSize);
   const graph2 = new GridGraph(game.mapSize);

@@ -67,7 +67,7 @@ class Vertex {
     push();
     fill(this.col);
     let worldPos = game.fromPosToWorldPos(this.pos);
-    if(this.exist != 0) circle(worldPos.x, worldPos.y, 2 * radius);
+    if(this.exist < PROBABILITY) circle(worldPos.x, worldPos.y, 2 * radius);
     pop();
   }
 }
