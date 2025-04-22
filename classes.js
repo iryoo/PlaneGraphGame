@@ -37,11 +37,16 @@ class Vec2 {
 
 class Vertex {
   constructor(_pos) {
-    this.pos = _pos;
     this.state = 0;
     this.col = null;
     this.setColor(0, false);
     this.adjacentEdges = [];
+    this.exist = Math.floor(Math.random() * 100);
+    if(this.exist < PROBABILITY) {
+      this.pos = _pos;
+    } else {
+      this.pos = new Vec2(-100, -100);
+    }
   }
 
   setState(_state) {
@@ -62,7 +67,7 @@ class Vertex {
     push();
     fill(this.col);
     let worldPos = game.fromPosToWorldPos(this.pos);
-    circle(worldPos.x, worldPos.y, 2 * radius);
+    if(this.exist != 0) circle(worldPos.x, worldPos.y, 2 * radius);
     pop();
   }
 }

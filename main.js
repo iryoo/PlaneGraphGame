@@ -2,6 +2,8 @@ const roundText = document.getElementById("round");
 const mapSize = document.getElementById("mapSize");
 const mapSizeValueSpan = document.getElementById("mapSizeValue");
 const ruleModal = document.getElementById("ruleModal");
+const probability = document.getElementById("probability");
+const probabilitySpan = document.getElementById("probabilityValue");
 
 const DISPLAY_SIZE = 500;
 let MAP_SIZE = mapSize.value;
@@ -9,6 +11,7 @@ let INTERVAL = DISPLAY_SIZE / MAP_SIZE;
 let PADDING = INTERVAL / 2;
 let VERTEX_RADIUS = INTERVAL / 6;
 let LINE_SIZE = VERTEX_RADIUS / 2;
+let PROBABILITY = 100;
 
 function updateSizeSettings(s) {
   MAP_SIZE = mapSize.value;
@@ -33,6 +36,13 @@ function closeModal() {
 mapSize.addEventListener("input", (event) => {
   updateSizeSettings(event.target.value);
   mapSizeValueSpan.textContent = event.target.value;
+  game = new Game(MAP_SIZE);
+});
+
+probability.addEventListener("input", (event) => {
+  updateSizeSettings(event.target.value);
+  probabilitySpan.textContent = event.target.value;
+  PROBABILITY = event.target.value;
   game = new Game(MAP_SIZE);
 });
 
