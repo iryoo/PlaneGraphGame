@@ -11,7 +11,7 @@ let INTERVAL = DISPLAY_SIZE / MAP_SIZE;
 let PADDING = INTERVAL / 2;
 let VERTEX_RADIUS = INTERVAL / 6;
 let LINE_SIZE = VERTEX_RADIUS / 2;
-let PROBABILITY = 100;
+let PROBABILITY = probability.value;
 
 function updateSizeSettings(s) {
   MAP_SIZE = mapSize.value;
